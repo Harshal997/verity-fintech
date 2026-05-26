@@ -38,7 +38,7 @@ const SnackbarComp = ({
       action={{
         label: "",
         labelStyle: { display: "none" },
-        icon: () => <AntDesign name="close" size={16} color={iconColor ?? "#FFF"} />,
+        icon: () => <AntDesign name="close" size={14} color={iconColor ?? "#FFF"} />,
         onPress: () => {
           setIsVisible(false);
           if (clearError) clearError();

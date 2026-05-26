@@ -1,10 +1,8 @@
 import {
   ActivityIndicator,
-  Alert,
   Keyboard,
   ScrollView,
   StyleSheet,
-  Text,
   TextInput,
   TouchableOpacity,
   View,
@@ -24,6 +22,7 @@ import {
 } from "../../utils/validateForm";
 import SnackbarComp from "../../components/Snackbar";
 import { getErrorMessage } from "../../constants/error";
+import FormInput from "../../components/FormInput";
 
 const Signup = () => {
   const [form, setForm] = useState({
@@ -48,7 +47,6 @@ const Signup = () => {
   const [alertVisible, setAlertVisible] = useState(false);
   const { signIn, signUp, loading, error, clearError } = useAuthStore();
 
-  // on "Continue" press for sign in:
   const handleSignIn = async () => {
     console.log("Signing in with:", { email: form.email });
     if (validateForm()) {
@@ -59,7 +57,6 @@ const Signup = () => {
     }
   };
 
-  // on "Create account" press:
   const handleSignUp = async () => {
     if (validateForm()) {
       await signUp(form.email, form.password, form.fullName, form.mobileNumber);
@@ -69,14 +66,10 @@ const Signup = () => {
     }
   };
 
-  // show error if present:
   useEffect(() => {
     if (error) {
-      // show your error UI, then:
-      // clearError() after user dismisses
       console.log("Authentication error:", error);
       setAlertVisible(true);
-      //   clearError();
     }
   }, [error]);
 
@@ -91,7 +84,7 @@ const Signup = () => {
         await handleSignIn();
       }
     } catch (err) {
-      // handle error, maybe set some local error state to show in UI
+      setAlertVisible(true);
       console.error("Authentication error:", err);
     }
   };
@@ -120,7 +113,6 @@ const Signup = () => {
 
     setErrors(newErrors);
 
-    // check if no errors
     return Object.values(newErrors).every((err) => err === "");
   };
 
@@ -187,131 +179,59 @@ const Signup = () => {
           <View style={styles.inputContainer}>
             {signUpMode && (
               <View style={{ rowGap: 5 }}>
-                <TextWrapper
-                  style={[
-                    styles.subheadingText,
-                    { fontSize: 16, opacity: 0.5, letterSpacing: 1 },
-                  ]}
-                >
-                  FULL NAME
-                </TextWrapper>
-                <TextInput
-                  onFocus={() => handleFocus("fullName", true)}
-                  onBlur={() => handleFocus("fullName", false)}
+                <FormInput
+                  label="FULL NAME"
                   placeholder="Anita Desai"
+                  keyboardType="email-address"
                   value={form.fullName}
                   onChangeText={(text) => handleChange("fullName", text)}
-                  style={[
-                    styles.input,
-                    {
-                      borderWidth: focused.fullName ? 1 : 0,
-                      borderColor: colors.primary,
-                    },
-                  ]}
-                  placeholderTextColor={colors.darkGrey}
+                  onFocus={() => handleFocus("fullName", true)}
+                  onBlur={() => handleFocus("fullName", false)}
+                  errors={errors}
+                  focused={focused}
                 />
-                {errors.fullName && (
-                  <TextWrapper style={{ color: colors.error, marginTop: 4 }}>
-                    {errors.fullName}
-                  </TextWrapper>
-                )}
               </View>
             )}
             <View style={{ marginTop: 12, rowGap: 5 }}>
-              <TextWrapper
-                style={[
-                  styles.subheadingText,
-                  { fontSize: 16, opacity: 0.5, letterSpacing: 1 },
-                ]}
-              >
-                EMAIL
-              </TextWrapper>
-              <TextInput
-                onFocus={() => handleFocus("email", true)}
-                onBlur={() => handleFocus("email", false)}
+              <FormInput
+                label="EMAIL"
                 placeholder="you@example.com"
                 keyboardType="email-address"
                 value={form.email}
                 onChangeText={(text) => handleChange("email", text)}
-                autoCapitalize="none"
-                style={[
-                  styles.input,
-                  {
-                    borderWidth: focused.email ? 1 : 0,
-                    borderColor: colors.primary,
-                  },
-                ]}
-                placeholderTextColor={colors.darkGrey}
+                onFocus={() => handleFocus("email", true)}
+                onBlur={() => handleFocus("email", false)}
+                errors={errors}
+                focused={focused}
               />
-              {errors.email && (
-                <TextWrapper style={{ color: colors.error, marginTop: 4 }}>
-                  {errors.email}
-                </TextWrapper>
-              )}
             </View>
             {signUpMode && (
               <View style={{ marginTop: 12, rowGap: 5 }}>
-                <TextWrapper
-                  style={[
-                    styles.subheadingText,
-                    { fontSize: 16, opacity: 0.5, letterSpacing: 1 },
-                  ]}
-                >
-                  MOBILE NUMBER
-                </TextWrapper>
-                <TextInput
-                  onFocus={() => handleFocus("mobileNumber", true)}
-                  onBlur={() => handleFocus("mobileNumber", false)}
+                <FormInput
+                  label="MOBILE NUMBER"
                   placeholder="+91 98765 43210"
                   keyboardType="phone-pad"
                   value={form.mobileNumber}
                   onChangeText={(text) => handleChange("mobileNumber", text)}
-                  style={[
-                    styles.input,
-                    {
-                      borderWidth: focused.mobileNumber ? 1 : 0,
-                      borderColor: colors.primary,
-                    },
-                  ]}
-                  placeholderTextColor={colors.darkGrey}
+                  onFocus={() => handleFocus("mobileNumber", true)}
+                  onBlur={() => handleFocus("mobileNumber", false)}
+                  errors={errors}
+                  focused={focused}
                 />
-                {errors.mobileNumber && (
-                  <TextWrapper style={{ color: colors.error, marginTop: 4 }}>
-                    {errors.mobileNumber}
-                  </TextWrapper>
-                )}
               </View>
             )}
             <View style={{ marginTop: 12, rowGap: 5 }}>
-              <TextWrapper
-                style={[
-                  styles.subheadingText,
-                  { fontSize: 16, opacity: 0.5, letterSpacing: 1 },
-                ]}
-              >
-                PASSWORD
-              </TextWrapper>
-              <TextInput
-                onFocus={() => handleFocus("password", true)}
-                onBlur={() => handleFocus("password", false)}
+              <FormInput
+                label="PASSWORD"
                 placeholder="........"
+                keyboardType="email-address"
                 value={form.password}
                 onChangeText={(text) => handleChange("password", text)}
-                style={[
-                  styles.input,
-                  {
-                    borderWidth: focused.password ? 1 : 0,
-                    borderColor: colors.primary,
-                  },
-                ]}
-                placeholderTextColor={colors.darkGrey}
-                secureTextEntry
+                onFocus={() => handleFocus("password", true)}
+                onBlur={() => handleFocus("password", false)}
+                errors={errors}
+                focused={focused}
               />
-              {errors.password && (
-                <TextWrapper style={{ color: colors.error, marginTop: 4 }}>
-                  {errors.password}
-                </TextWrapper>
-              )}
             </View>
           </View>
           {loading ? (
@@ -377,15 +297,6 @@ const authStyles = (colors: any) =>
     },
     inputContainer: {
       marginTop: 32,
-    },
-    input: {
-      backgroundColor: colors.backgroundLight,
-      height: 60,
-      color: colors.text,
-      letterSpacing: 2,
-      fontSize: 18,
-      padding: 12,
-      borderRadius: 8,
     },
     submitButton: {
       backgroundColor: colors.primaryLight,
